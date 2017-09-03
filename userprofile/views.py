@@ -97,9 +97,13 @@ def profile(request):
  	leaveRequest = [];	
  	if faculty.facultyPostForLeave is not None:
  		leaveRequest.append(Leave.objects.filter(leaveto=faculty.facultyPostForLeave, processing_status='processing'));
- 	print(leaveRequest)
+ 	try:
+		leaveRequestLength = len(leaveRequest[0]);
+	except:
+		leaveRequestLength = 0;
+	print(leaveRequest)
 	# 	print(headLeave);
- 	return render(request, BASE_DIR+ '/templates/pages/profile.html', {'user': user, 'length': len(leaveRequest[0]), 'leave': leave, 'count': len(leave), 'faculty': faculty, 'leaveRequest': leaveRequest, 'remainingLeave': remainingLeave});
+ 	return render(request, BASE_DIR+ '/templates/pages/profile.html', {'user': user, 'length': leaveRequestLength, 'leave': leave, 'count': len(leave), 'faculty': faculty, 'leaveRequest': leaveRequest, 'remainingLeave': remainingLeave});
 
 @login_required(login_url='/login')
 def approve(request, username):
@@ -113,8 +117,13 @@ def approve(request, username):
 		leaveRequest = [];
 		if faculty.facultyPostForLeave is not None:
 			leaveRequest.append(Leave.objects.filter(leaveto=faculty.facultyPostForLeave, processing_status='processing'));
+		try:
+			leaveRequestLength = len(leaveRequest[0]);
+		except:
+			leaveRequestLength = 0;
+		
 		print(leaveRequest)
-		return render(request, BASE_DIR + '/templates/pages/approve.html', {'user': user, 'length': len(leaveRequest), 'leave': leave, 'count': len(leave), 'faculty': faculty, 'leaveRequest': leaveRequest, 'remainingLeave': remainingLeave});			
+		return render(request, BASE_DIR + '/templates/pages/approve.html', {'user': user, 'length': leaveRequestLength, 'leave': leave, 'count': len(leave), 'faculty': faculty, 'leaveRequest': leaveRequest, 'remainingLeave': remainingLeave});			
 	return HttpResponse("You have no rights to access this page");
 
 @login_required(login_url='/login')
